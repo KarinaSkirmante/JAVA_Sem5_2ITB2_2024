@@ -21,6 +21,7 @@ public class FirstController {
 		return "hello-msg-page";//tiek parādīta hello-msg-page.html lapa
 	}
 	
-	
-	
+	//TODO
+	//izveidot kontrolieri, kura caur modeli nosūta Produktu
+	//html lapu prikes produkta attēlošanas
 }
