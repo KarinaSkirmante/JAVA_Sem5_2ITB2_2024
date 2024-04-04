@@ -40,6 +40,7 @@ public class FirstController {
 		Product tempProduct1 = new Product("Abols", "Sarkans", 0.99f, 5);
 		Product tempProduct2 = new Product("Zemene", "Salda", 1.99f, 50);
 		Product tempProduct3 = new Product("Burkans", "Oranžš", 0.39f, 500);
+			
 		ArrayList<Product> allProducts = new ArrayList<>(
 				Arrays.asList(tempProduct1, tempProduct2, tempProduct3));
 		
