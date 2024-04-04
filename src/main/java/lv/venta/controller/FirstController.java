@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import lv.venta.model.Product;
+
 @Controller
 public class FirstController {
 
@@ -21,7 +23,22 @@ public class FirstController {
 		return "hello-msg-page";//tiek parādīta hello-msg-page.html lapa
 	}
 	
-	//TODO
-	//izveidot kontrolieri, kura caur modeli nosūta Produktu
-	//html lapu prikes produkta attēlošanas
+	@GetMapping("/product/test")//localhost:8080/product/test
+	public String getProductTest(Model model) {
+		Product tempProduct = new Product("Abols", "Sarkans", 0.99f, 5);
+		model.addAttribute("mydata", tempProduct);
+		return "product-one-show-page";//tiek parādīta product-one-show-page.html lapa
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
