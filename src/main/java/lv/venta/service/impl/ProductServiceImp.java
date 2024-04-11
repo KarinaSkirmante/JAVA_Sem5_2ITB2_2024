@@ -111,14 +111,33 @@ public class ProductServiceImp implements ICRUDProductService, IFilterProductSer
 
 	@Override
 	public ArrayList<Product> filterByTitleOrDescription(String text) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		if(text == null) throw new Exception("Search text can not be null");
+		
+		ArrayList<Product> result = new ArrayList<>();
+		
+		for(Product tempP: allProducts) {
+			if(tempP.getTitle().contains(text) || tempP.getDescription().contains(text))
+			{
+				result.add(tempP);
+			}
+		}
+		
+		return result;
+		
 	}
 
 	@Override
 	public float calculateProductsTotalValue() throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		if (allProducts.isEmpty())
+			throw new Exception("Product list is empty");
+		
+		
+		float result = 0;
+		for(Product tempP: allProducts) {
+			result += tempP.getPrice()*tempP.getQuantity();
+		}
+		
+		return result;
 	}
 
 }
