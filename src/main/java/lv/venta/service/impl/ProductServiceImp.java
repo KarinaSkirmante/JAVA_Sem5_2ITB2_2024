@@ -62,26 +62,51 @@ public class ProductServiceImp implements ICRUDProductService, IFilterProductSer
 
 	@Override
 	public void updateById(int id, String title, String description, float price, int quantity) throws Exception {
-		// TODO Auto-generated method stub
+		Product updateProduct = retrieveById(id);
+		if(title != null) updateProduct.setTitle(title);
+		if(description !=null) updateProduct.setDescription(description);
+		if(price >= 0 && price <= 10000) updateProduct.setPrice(price);
+		if(quantity >= 0 && quantity <= 100 ) updateProduct.setQuantity(quantity);
 
 	}
 
 	@Override
 	public void deleteById(int id) throws Exception {
-		// TODO Auto-generated method stub
+		Product deleteProduct = retrieveById(id);
+		allProducts.remove(deleteProduct);
 
 	}
 
 	@Override
 	public ArrayList<Product> filterByPriceLessThanThreshold(float threshold) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		if(threshold < 0 || threshold > 10000 ) throw new Exception("The limit of price is wrong");
+		
+		ArrayList<Product> result = new ArrayList<>();
+		
+		for(Product tempP: allProducts) {
+			if(tempP.getPrice() < threshold)
+			{
+				result.add(tempP);
+			}
+		}
+		
+		return result;
 	}
 
 	@Override
 	public ArrayList<Product> filterByQuantityLessThanThreshold(int threshold) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		if(threshold < 0 || threshold > 100 ) throw new Exception("The limit of quantity is wrong");
+		
+		ArrayList<Product> result = new ArrayList<>();
+		
+		for(Product tempP: allProducts) {
+			if(tempP.getQuantity() < threshold)
+			{
+				result.add(tempP);
+			}
+		}
+		
+		return result;
 	}
 
 	@Override
