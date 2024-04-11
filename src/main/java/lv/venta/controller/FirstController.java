@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import lv.venta.model.Product;
@@ -61,7 +62,7 @@ public class FirstController {
 		}
 	}
 
-	@GetMapping("/product/one") // localhost:8080/product/one?id=5
+	@GetMapping("/product/one") // localhost:8080/product/one?id=2
 	public String getProductOneId(@RequestParam("id") int id, Model model) {
 		try
 		{
@@ -87,5 +88,40 @@ public class FirstController {
 			return "error-page";// tiek parādīta error-page.html lapa
 		}
 	}
+	
+	
+	@GetMapping("/product/insert") //localhost:8080/product/insert
+	public String getProductInsert(Model model) {
+		model.addAttribute("product", new Product());//noklusējuma produkts tiks padots uz lapu
+		return "product-insert-page";//tiek parādīta product-insert-page.html lapa
+	}
+	
+	//TODO izveidosim html lapu
+	
+	@PostMapping("/product/insert")
+	public String postProductInsert(Product product) {//iegūstam aju aizpildītu produktu
+		
+		System.out.println(product);
+		try {
+			crudService.create(product.getTitle(), product.getDescription(), 
+					product.getPrice(), product.getQuantity());
+			return "redirect:/product/all";//tiks pārvirzīts jeb izsaukts localhost:8080/product/all
+		} catch (Exception e) {
+			
+			return "redirect:/error";//tiks pārvirzīts jeb izsaukt loclahost:8080/error
+		}
+	
+	}
+	
+	@GetMapping("/error")//localhost:8080/error
+	public String getError() {
+		return "error-page";
+	}
+	
+	
+	
+	
+	
+	
 
 }
