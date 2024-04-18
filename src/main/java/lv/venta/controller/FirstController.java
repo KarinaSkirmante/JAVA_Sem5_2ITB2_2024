@@ -125,6 +125,57 @@ public class FirstController {
 		return "error-page";
 	}
 	
+	@GetMapping("/product/update/{id}")//localhost:8080/product/update/2
+	public String getProductUpdateById(@PathVariable("id") int id, Model model) {
+		
+		try {
+			Product updatedProduct = crudService.retrieveById(id);
+			model.addAttribute("product", updatedProduct);
+			return "product-update-page";//tiks parādīta product-update-page.html lapa ar atrasto produktu
+			
+			
+		} catch (Exception e) {
+			model.addAttribute("errormsg", e.getMessage());
+			return "error-page";// tiek parādīta error-page.html lapa
+		}
+		
+	}
+	
+	
+	
+	@PostMapping("/product/update/{id}")
+	public String postProductUpdateById(@Valid Product product, 
+			BindingResult result, @PathVariable("id") int id, Model model) {
+		
+	if(result.hasErrors()) {
+		return "product-update-page";//tiks parādīta product-update-page.html lapa ar atrasto produktu	
+	}
+	else
+	{
+		try
+		{
+			crudService.updateById(id,product.getTitle(), product.getDescription(), 
+				product.getPrice(), product.getQuantity());
+			return "redirect:/product/all"; //var arī "redirect:/product/all/" + id; vai arī "redirect:/product/one?id=" + id;
+		}
+		catch (Exception e) {
+			model.addAttribute("errormsg", e.getMessage());
+			return "error-page";// tiek parādīta error-page.html lapa
+		}
+		
+	}
+		
+		
+	}
+	
+	//TODO uztaisīt deleteById
+	
+	//TODO pamēģīnāt uz @RequestParam?
+	
+	
+	//izveidojam 4 get kontrolierus prieks filtrācijas funkcijām
+	
+	
 	
 	
 	
