@@ -56,6 +56,7 @@ public class FirstController {
 
 		try {
 			model.addAttribute("mydata", crudService.retrieveAll());
+			model.addAttribute("msg", "All products");
 			return "product-all-show-page";// tiek parādīta product-all-show-page.html lapa
 		}
 		catch (Exception e) {
@@ -177,6 +178,7 @@ public class FirstController {
 		try {
 			crudService.deleteById(id);
 			model.addAttribute("mydata", crudService.retrieveAll());
+			model.addAttribute("msg", "All products");
 			return "product-all-show-page";// tiek parādīta product-all-show-page.html lapa
 		} catch (Exception e) {
 			model.addAttribute("errormsg", e.getMessage());
@@ -186,18 +188,33 @@ public class FirstController {
 		
 	}
 	
-	
-	
-	
-	//TODO pamēģīnāt uz @RequestParam?
-	
-	
+		
+	//TODO pameģinam ielikt atsevisķu nosaukumu html- kas tie ir pa produktiem
+	//un caur model nosūtīt so nosaukumu
 	//izveidojam 4 get kontrolierus prieks filtrācijas funkcijām
+	@GetMapping("/product/filter/price/{threshold}")//localhost:8080/product/filter/price/1.5
+	public String getProductFilterByPrice(@PathVariable("threshold") float threshold,
+			Model model) {
+		
+		try
+		{
+			ArrayList<Product> filterProducts 
+			= filterService.filterByPriceLessThanThreshold(threshold);
+			model.addAttribute("mydata", filterProducts);
+			model.addAttribute("msg", "Products filtered by price: " + threshold + " eur");
+			return "product-all-show-page";// tiek parādīta product-all-show-page.html lapa
+
+		}
+		catch (Exception e) {
+			model.addAttribute("errormsg", e.getMessage());
+			return "error-page";// tiek parādīta error-page.html lapa
+		}
+	
+	}
 	
 	
 	
-	
-	
+	//TODO uztaisām kontrolierus visām pārējām filterService funkcijām un notetsējam
 	
 	
 
