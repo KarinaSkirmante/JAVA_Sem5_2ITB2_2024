@@ -170,7 +170,24 @@ public class FirstController {
 		
 	}
 	
-	//TODO uztaisīt deleteById
+	
+	@GetMapping("/product/delete/{id}")//localhost:8080/product/delete/2
+	public String getProductDeleteById(@PathVariable("id") int id, Model model) {
+		
+		try {
+			crudService.deleteById(id);
+			model.addAttribute("mydata", crudService.retrieveAll());
+			return "product-all-show-page";// tiek parādīta product-all-show-page.html lapa
+		} catch (Exception e) {
+			model.addAttribute("errormsg", e.getMessage());
+			return "error-page";// tiek parādīta error-page.html lapa
+		}
+		
+		
+	}
+	
+	
+	
 	
 	//TODO pamēģīnāt uz @RequestParam?
 	
