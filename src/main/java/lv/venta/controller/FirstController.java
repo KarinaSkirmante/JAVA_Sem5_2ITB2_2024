@@ -125,12 +125,13 @@ public class FirstController {
 		return "error-page";
 	}
 	
-	@GetMapping("/product/update/{id}")//localhost:8080/product/update/2
-	public String getProductUpdateById(@PathVariable("id") int id, Model model) {
+	@GetMapping("/product/update")//localhost:8080/product/update?id=2
+	public String getProductUpdateById(@RequestParam("id") int id, Model model) {
 		
 		try {
 			Product updatedProduct = crudService.retrieveById(id);
 			model.addAttribute("product", updatedProduct);
+			model.addAttribute("id", id);
 			return "product-update-page";//tiks parādīta product-update-page.html lapa ar atrasto produktu
 			
 			
@@ -143,11 +144,12 @@ public class FirstController {
 	
 	
 	
-	@PostMapping("/product/update/{id}")
+	@PostMapping("/product/update")
 	public String postProductUpdateById(@Valid Product product, 
-			BindingResult result, @PathVariable("id") int id, Model model) {
+			BindingResult result, @RequestParam("id") int id, Model model) {
 		
 	if(result.hasErrors()) {
+		model.addAttribute("id", id);
 		return "product-update-page";//tiks parādīta product-update-page.html lapa ar atrasto produktu	
 	}
 	else
