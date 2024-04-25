@@ -17,6 +17,10 @@ import lv.venta.model.Product;
 import lv.venta.service.ICRUDProductService;
 import lv.venta.service.IFilterProductService;
 
+//TODO izveidot divas jaunas kontrolieru klases
+//un visus, ka saistīts ar CRUD kontrolieru funkcijām, ielikt vienā klase
+//un viu, aks saistīts ar Filter kontrolieru funkcija, ieliekt otrajā klasē
+
 @Controller
 public class FirstController {
 
