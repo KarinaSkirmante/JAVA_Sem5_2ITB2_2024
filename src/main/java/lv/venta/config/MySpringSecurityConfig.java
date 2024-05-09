@@ -13,6 +13,12 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+//TODO uztaisīt divas modeļu kalses MyUser un MyAuthority 
+//.izveidot abiem repositopriju
+//Comandline runner funkcijā izveidot 2 lietotajums un piesiatīt 2 lomas
+
+
+
 @Configuration
 @EnableWebSecurity
 public class MySpringSecurityConfig {
