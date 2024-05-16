@@ -2,6 +2,7 @@ package lv.venta.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -13,6 +14,8 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import lv.venta.service.impl.MyUserDetailsManagerServiceImpl;
+
 //TODO uztaisīt divas modeļu kalses MyUser un MyAuthority 
 //.izveidot abiem repositopriju
 //Comandline runner funkcijā izveidot 2 lietotajums un piesiatīt 2 lomas
@@ -23,30 +26,27 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class MySpringSecurityConfig {
 	
+
 	@Bean
-	public UserDetailsManager createTestUser() {
+	public MyUserDetailsManagerServiceImpl getService()
+	{
+		return new MyUserDetailsManagerServiceImpl();
+	}
+	
+	
+	
+	
+	@Bean
+	public DaoAuthenticationProvider createAuthProvider() {
 		PasswordEncoder encoder =
 			    PasswordEncoderFactories.createDelegatingPasswordEncoder();
-		
-		UserDetails u1Details = 
-				User
-				.builder()
-				.username("admin")
-				.password(encoder.encode("admin"))
-				.authorities("ADMIN")
-				.build();
-		
-		UserDetails u2Details = 
-				User
-				.builder()
-				.username("karina")
-				.password(encoder.encode("123"))
-				.authorities("USER")
-				.build();
-		
-		return new InMemoryUserDetailsManager(u1Details, u2Details);
-		
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+		provider.setPasswordEncoder(encoder);
+		provider.setUserDetailsService(getService());
+		return provider;
+	
 	}
+	
 	
 	@Bean
 	public SecurityFilterChain configureEndpoints(HttpSecurity http) throws Exception {
