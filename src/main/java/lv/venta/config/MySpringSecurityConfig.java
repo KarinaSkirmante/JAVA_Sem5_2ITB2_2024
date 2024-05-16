@@ -62,9 +62,12 @@ public class MySpringSecurityConfig {
 				.requestMatchers("/product/update**").hasAuthority("ADMIN")
 				.requestMatchers("/product/delete/**").hasAuthority("ADMIN")
 				.requestMatchers("/product/filter/**").hasAnyAuthority("USER", "ADMIN")
+				.requestMatchers("/h2-console/**").hasAuthority("ADMIN")
 				);
 		
-	
+		http.csrf(csrf->csrf.disable());
+		http.headers(frame->frame.frameOptions(option->option.disable()));
+		
 		http.formLogin(form -> form.permitAll());
 		
 		
