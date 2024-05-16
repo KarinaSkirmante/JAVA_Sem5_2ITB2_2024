@@ -64,7 +64,8 @@ public class MySpringSecurityConfig {
 				.requestMatchers("/product/filter/**").hasAnyAuthority("USER", "ADMIN")
 				);
 		
-		http.formLogin().permitAll();
+	
+		http.formLogin(form -> form.permitAll());
 		
 		
 		return http.build();
