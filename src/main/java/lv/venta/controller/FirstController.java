@@ -54,11 +54,7 @@ public class FirstController {
 */
 	
 	
-	
-	@GetMapping("/error")//localhost:8080/error
-	public String getError() {
-		return "error-page";
-	}
+
 	
 
 	
