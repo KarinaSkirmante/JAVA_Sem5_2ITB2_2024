@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import lv.venta.model.Product;
 import lv.venta.service.ICRUDProductService;
 import lv.venta.service.IFilterProductService;
+import lv.venta.utils.MyException;
 
 @Service
 public class ProductServiceImp implements ICRUDProductService, IFilterProductService {
@@ -16,10 +17,10 @@ public class ProductServiceImp implements ICRUDProductService, IFilterProductSer
 			new Product("Zemene", "Salda", 1.99f, 50), new Product("Burkans", "Oranžš", 0.39f, 500)));
 
 	@Override
-	public Product create(String title, String description, float price, int quantity) throws Exception {
+	public Product create(String title, String description, float price, int quantity) throws MyException {
 		// pārbaudam ienākošos parametrus
 		if (title == null || description == null || price < 0 || quantity < 0)
-			throw new Exception("Problems with input params");
+			throw new MyException("Problems with input params");
 
 		// noskaidrojam, vai jau tāds produkts neeksistē
 		for (Product tempP : allProducts) {
@@ -37,15 +38,15 @@ public class ProductServiceImp implements ICRUDProductService, IFilterProductSer
 	}
 
 	@Override
-	public ArrayList<Product> retrieveAll() throws Exception {
+	public ArrayList<Product> retrieveAll() throws MyException {
 		if (allProducts.isEmpty())
-			throw new Exception("Product list is empty");
+			throw new MyException("Product list is empty");
 
 		return allProducts;
 	}
 
 	@Override
-	public Product retrieveById(int id) throws Exception {
+	public Product retrieveById(int id) throws MyException {
 		if (id > 0) {
 			for (Product tempP : allProducts) {
 				if (tempP.getId() == id) {
@@ -53,15 +54,15 @@ public class ProductServiceImp implements ICRUDProductService, IFilterProductSer
 				}
 			}
 
-			throw new Exception("Product with " + id + " is not found");
+			throw new MyException("Product with " + id + " is not found");
 
 		} else {
-			throw new Exception("Id should be positive");
+			throw new MyException("Id should be positive");
 		}
 	}
 
 	@Override
-	public void updateById(int id, String title, String description, float price, int quantity) throws Exception {
+	public void updateById(int id, String title, String description, float price, int quantity) throws MyException {
 		Product updateProduct = retrieveById(id);
 		if(title != null) updateProduct.setTitle(title);
 		if(description !=null) updateProduct.setDescription(description);
@@ -71,7 +72,7 @@ public class ProductServiceImp implements ICRUDProductService, IFilterProductSer
 	}
 
 	@Override
-	public void deleteById(int id) throws Exception {
+	public void deleteById(int id) throws MyException {
 		Product deleteProduct = retrieveById(id);
 		allProducts.remove(deleteProduct);
 

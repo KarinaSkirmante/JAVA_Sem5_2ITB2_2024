@@ -1,7 +1,6 @@
 package lv.venta.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,30 +19,33 @@ import lv.venta.service.IFilterProductService;
 @Controller
 public class FirstController {
 
+	
+	private final static String MYDATA = "mydata";
+	
 	@Autowired
 	private ICRUDProductService crudService;
 
 	@Autowired
 	private IFilterProductService filterService;
+	
+	
 
 	@GetMapping("/hello") // localhost:8080/hello
 	public String getHello() {
-		System.out.println("First Controller!!!");
 		return "hello-page"; // tiek parādīta hello-page.html lapa
 
 	}
 
 	@GetMapping("/hello/msg") // localhost:8080/hello/msg
 	public String getHelloMsg(Model model) {
-		System.out.println("Msg controller is called");
-		model.addAttribute("mydata", "Ziņa no JAVA Spring!!!!");
+		model.addAttribute(MYDATA, "Ziņa no JAVA Spring!!!!");
 		return "hello-msg-page";// tiek parādīta hello-msg-page.html lapa
 	}
 
 	@GetMapping("/product/test") // localhost:8080/product/test
 	public String getProductTest(Model model) {
 		try {
-			model.addAttribute("mydata", crudService.retrieveById(1));
+			model.addAttribute(MYDATA, crudService.retrieveById(1));
 			return "product-one-show-page";// tiek parādīta product-one-show-page.html lapa
 		} catch (Exception e) {
 			model.addAttribute("errormsg", e.getMessage());
@@ -55,7 +57,7 @@ public class FirstController {
 	public String getProductAll(Model model) {
 
 		try {
-			model.addAttribute("mydata", crudService.retrieveAll());
+			model.addAttribute(MYDATA, crudService.retrieveAll());
 			model.addAttribute("msg", "All products");
 			return "product-all-show-page";// tiek parādīta product-all-show-page.html lapa
 		}
@@ -69,7 +71,7 @@ public class FirstController {
 	public String getProductOneId(@RequestParam("id") int id, Model model) {
 		try
 		{
-			model.addAttribute("mydata", crudService.retrieveById(id));
+			model.addAttribute(MYDATA, crudService.retrieveById(id));
 			return "product-one-show-page";// tiek parādīta product-one-show-page.html lapa
 		}
 		catch (Exception e) {
@@ -83,7 +85,7 @@ public class FirstController {
 	public String getProductAllId(@PathVariable("id") int id, Model model) {
 		try
 		{
-			model.addAttribute("mydata", crudService.retrieveById(id));
+			model.addAttribute(MYDATA, crudService.retrieveById(id));
 			return "product-one-show-page";// tiek parādīta product-one-show-page.html lapa
 		}
 		catch (Exception e) {
@@ -99,7 +101,6 @@ public class FirstController {
 		return "product-insert-page";//tiek parādīta product-insert-page.html lapa
 	}
 	
-	//TODO izveidosim html lapu
 	
 	@PostMapping("/product/insert")
 	public String postProductInsert(@Valid Product product, BindingResult result) {//iegūstam aju aizpildītu produktu
@@ -177,7 +178,7 @@ public class FirstController {
 		
 		try {
 			crudService.deleteById(id);
-			model.addAttribute("mydata", crudService.retrieveAll());
+			model.addAttribute(MYDATA, crudService.retrieveAll());
 			model.addAttribute("msg", "All products");
 			return "product-all-show-page";// tiek parādīta product-all-show-page.html lapa
 		} catch (Exception e) {
@@ -189,7 +190,7 @@ public class FirstController {
 	}
 	
 		
-	//TODO pameģinam ielikt atsevisķu nosaukumu html- kas tie ir pa produktiem
+	//pameģinam ielikt atsevisķu nosaukumu html- kas tie ir pa produktiem
 	//un caur model nosūtīt so nosaukumu
 	//izveidojam 4 get kontrolierus prieks filtrācijas funkcijām
 	@GetMapping("/product/filter/price/{threshold}")//localhost:8080/product/filter/price/1.5
@@ -200,7 +201,7 @@ public class FirstController {
 		{
 			ArrayList<Product> filterProducts 
 			= filterService.filterByPriceLessThanThreshold(threshold);
-			model.addAttribute("mydata", filterProducts);
+			model.addAttribute(MYDATA, filterProducts);
 			model.addAttribute("msg", "Products filtered by price: " + threshold + " eur");
 			return "product-all-show-page";// tiek parādīta product-all-show-page.html lapa
 
@@ -214,7 +215,7 @@ public class FirstController {
 	
 	
 	
-	//TODO uztaisām kontrolierus visām pārējām filterService funkcijām un notetsējam
+	// uztaisām kontrolierus visām pārējām filterService funkcijām un notetsējam
 	@GetMapping("/product/filter/quantity/{threshold}")//localhost:8080/product/filter/quantity/20
 	public String getProductFilterByQuantity(@PathVariable("threshold") int threshold,
 			Model model) {
@@ -223,7 +224,7 @@ public class FirstController {
 		{
 			ArrayList<Product> filterProducts 
 			= filterService.filterByQuantityLessThanThreshold(threshold);
-			model.addAttribute("mydata", filterProducts);
+			model.addAttribute(MYDATA, filterProducts);
 			model.addAttribute("msg", "Products filtered by quantity: " + threshold );
 			return "product-all-show-page";// tiek parādīta product-all-show-page.html lapa
 
@@ -243,7 +244,7 @@ public class FirstController {
 		{
 			ArrayList<Product> filterProducts 
 			= filterService.filterByTitleOrDescription(text);
-			model.addAttribute("mydata", filterProducts);
+			model.addAttribute(MYDATA, filterProducts);
 			model.addAttribute("msg", "Products filtered by text: " + text );
 			return "product-all-show-page";// tiek parādīta product-all-show-page.html lapa
 
@@ -260,7 +261,7 @@ public class FirstController {
 	public String getProductCaluclateTotal(Model model) {
 		try {
 			float result = filterService.calculateProductsTotalValue();
-			model.addAttribute("mydata", "Total value of all products is " + result + " eur");
+			model.addAttribute(MYDATA, "Total value of all products is " + result + " eur");
 			return "hello-msg-page";// tiek parādīta hello-msg-page.html lapa
 		} catch (Exception e) {
 			model.addAttribute("errormsg", e.getMessage());
