@@ -4,20 +4,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lv.venta.model.Product;
 import lv.venta.service.ICRUDProductService;
 import lv.venta.service.IFilterProductService;
 
-@Controller
+@RestController
 public class FirstController {
 
 	@Autowired
@@ -52,70 +56,54 @@ public class FirstController {
 	}
 
 	@GetMapping("/product/all") // localhost:8080/product/all
-	public String getProductAll(Model model) {
+	public ResponseEntity getProductAll() {
 
 		try {
-			model.addAttribute("mydata", crudService.retrieveAll());
-			model.addAttribute("msg", "All products");
-			return "product-all-show-page";// tiek parādīta product-all-show-page.html lapa
-		}
+				return new ResponseEntity<>(crudService.retrieveAll(), HttpStatus.OK); 
+			}
 		catch (Exception e) {
-			model.addAttribute("errormsg", e.getMessage());
-			return "error-page";// tiek parādīta error-page.html lapa
+				return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@GetMapping("/product/one") // localhost:8080/product/one?id=2
-	public String getProductOneId(@RequestParam("id") int id, Model model) {
+	public ResponseEntity getProductOneId(@RequestParam("id") int id) {
 		try
 		{
-			model.addAttribute("mydata", crudService.retrieveById(id));
-			return "product-one-show-page";// tiek parādīta product-one-show-page.html lapa
+			return new ResponseEntity<>(crudService.retrieveById(id), HttpStatus.OK);
 		}
 		catch (Exception e) {
-			model.addAttribute("errormsg", e.getMessage());
-			return "error-page";// tiek parādīta error-page.html lapa
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 	}
 
 	@GetMapping("/product/all/{id}") // localhost:8080/product/all/2
-	public String getProductAllId(@PathVariable("id") int id, Model model) {
+	public ResponseEntity getProductAllId(@PathVariable("id") int id, Model model) {
 		try
 		{
-			model.addAttribute("mydata", crudService.retrieveById(id));
-			return "product-one-show-page";// tiek parādīta product-one-show-page.html lapa
+			return new ResponseEntity<>(crudService.retrieveById(id), HttpStatus.OK);
 		}
 		catch (Exception e) {
-			model.addAttribute("errormsg", e.getMessage());
-			return "error-page";// tiek parādīta error-page.html lapa
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
 	
-	@GetMapping("/product/insert") //localhost:8080/product/insert
-	public String getProductInsert(Model model) {
-		model.addAttribute("product", new Product());//noklusējuma produkts tiks padots uz lapu
-		return "product-insert-page";//tiek parādīta product-insert-page.html lapa
-	}
-	
-	//TODO izveidosim html lapu
-	
 	@PostMapping("/product/insert")
-	public String postProductInsert(@Valid Product product, BindingResult result) {//iegūstam aju aizpildītu produktu
+	public ResponseEntity postProductInsert(@RequestBody @Valid Product product, BindingResult result) {//iegūstam aju aizpildītu produktu
 		//sajā gadījumā ir validāciju pāŗkāpumi Product objektam
 		if(result.hasErrors()) {
-			return "product-insert-page";//paliekam šajā pašā lapā
+			return new ResponseEntity<>("Invalid params", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		else
 		{
 			try {
-				crudService.create(product.getTitle(), product.getDescription(), 
-					product.getPrice(), product.getQuantity());
-				return "redirect:/product/all";//tiks pārvirzīts jeb izsaukts localhost:8080/product/all
+				
+				return new ResponseEntity<>(crudService.create(product.getTitle(), product.getDescription(), 
+						product.getPrice(), product.getQuantity()), HttpStatus.OK);
 			} catch (Exception e) {
-			
-				return "redirect:/error";//tiks pārvirzīts jeb izsaukt loclahost:8080/error
+				return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
 	
